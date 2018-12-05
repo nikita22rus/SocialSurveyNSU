@@ -1,25 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <style type="text/css">
+        table{border-collapse: collapse;
+
+        margin-top: 10px;
+        }
+        td{
+
+
+    padding: 5px; /* Поля вокруг содержимого ячеек */
+    border: 0px; /* Граница вокруг ячеек */
+   }
+
+
+
+    </style>
     <meta charset="UTF-8">
     <title>Form</title>
 </head>
 <body>
 
-<form action="#" th:action="@{/anketa/add}" th:object="${question}" method="post">
+<form action="#" th:action="@{/anketa/add}" th:object="${question}" method="post" align="center">
     <input type="text" th:field="*{text}" minlength="3" maxlength="512">
     <input type="submit" value="Добавить">
 </form>
 
-<table border="1" width="600">
+<table border="1" width="30%" align="center">
     <tr th:each="f : ${form}">
-        <td><span th:text="${f.number}"></span></td>
-        <td><span th:text="${f.text}"></span></td>
+        <td wight="10"><span th:text="${f.number}" align="center"></span></td>
+        <td><span th:text="${f.text}" align="left"></span></td>
 
-        <td>
+        <td width="50px">
             <form action="#" th:action="@{/anketa/delete}" th:object="${f}" method="post">
                 <input type="hidden" name="number" th:value="${f.number}">
-                <input type="submit" value="Удалить">
+                <input type="submit" value="Удалить" align="left">
             </form>
         </td>
 
