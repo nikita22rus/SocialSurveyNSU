@@ -15,8 +15,10 @@ public class WebController {
     private Form form = new Form(); // Создаем форму, чтобы можно было пользоваться ее методами
 
     @RequestMapping(value = "/anketa", method = RequestMethod.GET) // Функция первого запуска
-    public ModelAndView anketa (){
-        return new ModelAndView("anketa","question", new Question()); // Можно так, ничего не изменилось
+    public String anketa (Model model){
+        model.addAttribute(new Question());
+        model.addAttribute("form",form.getAllQuestions());
+        return "anketa";
     }
 
     @RequestMapping(value = "/anketa/add", method = RequestMethod.POST)
@@ -27,7 +29,7 @@ public class WebController {
         }
 
         model.addAttribute("form", form.getAllQuestions()); // Перезапишем В модели список вопросов
-        return "anketa"; // Запускаем наш шаблон anketa
+        return "redirect:/anketa"; // Запускаем наш шаблон anketa
     }
 
     @RequestMapping(value = "/anketa/delete", method = RequestMethod.POST)
@@ -43,7 +45,7 @@ public class WebController {
         model.addAttribute("question",question); // Перезаписываем пустой вопрос в модель, для дальнейшего заполнения в функции addQuestion()
 
         System.out.println(form.getAllQuestions());
-        return "anketa";
+        return "redirect:/anketa";
     }
 
 //    @RequestMapping(value = "/anketa/delete/{number}", method = RequestMethod.GET)
