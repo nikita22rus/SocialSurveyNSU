@@ -49,7 +49,9 @@ public class WebController {
         model.addAttribute("question",question); // Перезаписываем пустой вопрос в модель, для дальнейшего заполнения в функции addQuestion()
 
         System.out.println(form.getAllQuestions());
-        return "redirect:/anketa";
+        return "redirect:/anketa"; // Эта штука уберает проблему с перезагрузкой страницы
+        // С английского переводится как "Переадресовывать", думаю это оно и делает - после выполнения всех действий вызывает нашу самую первую функцию
+        // /anketa - , которая просто выводит список
     }
 
 
@@ -57,15 +59,14 @@ public class WebController {
     public String completeForm(Model model){
         System.out.println("completeForm");
         String Name = new String();
-        model.addAttribute("Name",Name);
-        model.addAttribute("questions",form.getAllQuestions());
+        model.addAttribute("Name",Name); // Создаем и добавляем новый атрибут
+        model.addAttribute("questions",form.getAllQuestions()); // И вопрсы, чтобы потом их вывести пользователю
         return "completeForm";
     }
     @RequestMapping(value = "/anketa/complete/addCompletedForm", method = RequestMethod.POST)
     public String addCompletedForm(@RequestParam("answer")ArrayList<String> answer,@RequestParam("personName") String personName, Model model) {
         System.out.println("addCompletedForm");
         System.out.println("personName: " + personName);
-
         ArrayList<Question> questions = form.getAllQuestions();
         for (String q : answer) {
             System.out.println(q);
