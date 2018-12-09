@@ -4,6 +4,16 @@ public class Question {
 
     private int number;
     protected String text;
+    protected String answer;
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
     public boolean correctness; // вопрос правильный или неправильный
 
     private Long id; // id пока не нужен
@@ -50,6 +60,6 @@ public class Question {
     }
 
     public String toString(){
-        return this.text;
+        return this.text + " - " + this.answer;
     }
 }

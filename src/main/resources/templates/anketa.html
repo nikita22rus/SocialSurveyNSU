@@ -21,6 +21,8 @@
 </head>
 <body>
 
+<a th:href = "@{/anketa/complete}"><label>Пройти опрос</label><a/>
+
 <form action="#" th:action="@{/anketa/add}" th:object="${question}" method="post" align="center">
     <input type="text" th:field="*{text}" minlength="3" maxlength="512">
     <input type="submit" value="Добавить">

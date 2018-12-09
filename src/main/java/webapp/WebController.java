@@ -1,6 +1,7 @@
 package webapp;
 
 
+import enteties.CompletedForm;
 import enteties.Form;
 import enteties.Question;
 import org.springframework.stereotype.Controller;
@@ -8,7 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
 
 @Controller
 public class WebController {
@@ -34,7 +38,7 @@ public class WebController {
 
     @RequestMapping(value = "/anketa/delete", method = RequestMethod.POST)
     public String deleteQuestion(@ModelAttribute("number") int number,Model model) { // Получаем номер из web интерфейса
-        System.out.println("Controller --------------------- deleteQuestion");
+        System.out.println("deleteQuestion");
         System.out.println("number to delete: " + number);
 
         form.deleteQuestion(number);
@@ -47,6 +51,52 @@ public class WebController {
         System.out.println(form.getAllQuestions());
         return "redirect:/anketa";
     }
+
+
+    @RequestMapping(value = "/anketa/complete", method = RequestMethod.GET)
+    public String completeForm(Model model){
+        System.out.println("completeForm");
+        String Name = new String();
+        model.addAttribute("Name",Name);
+        model.addAttribute("questions",form.getAllQuestions());
+        return "completeForm";
+    }
+    @RequestMapping(value = "/anketa/complete/addCompletedForm", method = RequestMethod.POST)
+    public String addCompletedForm(@RequestParam("answer")ArrayList<String> answer,@RequestParam("personName") String personName, Model model) {
+        System.out.println("addCompletedForm");
+        System.out.println("personName: " + personName);
+
+        ArrayList<Question> questions = form.getAllQuestions();
+        for (String q : answer) {
+            System.out.println(q);
+        }
+        for (int i=0;i < questions.size();i++){
+            questions.get(i).setAnswer(answer.get(i));
+        }
+
+        CompletedForm completedForm = new CompletedForm(questions,personName);
+        System.out.println(completedForm);
+        return "redirect:/anketa/complete";
+    }
+
+//        <table>
+//        <tr th:each="q : ${questions}">
+//            <td>
+//                <span th:text="${q.text}"></span>
+//                <br>
+//                <textarea
+//    th:field="*{q.answer}"></textarea>
+//            </td>
+//        </tr>
+//    </table>
+
+
+
+
+
+
+
+
 
 //    @RequestMapping(value = "/anketa/delete/{number}", method = RequestMethod.GET)
 //    @ResponseBody
