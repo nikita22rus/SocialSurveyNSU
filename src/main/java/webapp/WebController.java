@@ -4,19 +4,20 @@ package webapp;
 import enteties.CompletedForm;
 import enteties.Form;
 import enteties.Question;
+import enteties.Repository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Controller
 public class WebController {
     private Form form = new Form(); // Создаем форму, чтобы можно было пользоваться ее методами
+    private Repository repository = new Repository();
 
     @RequestMapping(value = "/anketa", method = RequestMethod.GET) // Функция первого запуска
     public String anketa (Model model){
@@ -66,7 +67,6 @@ public class WebController {
     @RequestMapping(value = "/anketa/complete/addCompletedForm", method = RequestMethod.POST)
     public String addCompletedForm(@RequestParam("answer")ArrayList<String> answer,@RequestParam("personName") String personName, Model model) {
         System.out.println("addCompletedForm");
-        System.out.println("personName: " + personName);
         ArrayList<Question> questions = form.getAllQuestions();
         for (String q : answer) {
             System.out.println(q);
@@ -74,11 +74,40 @@ public class WebController {
         for (int i=0;i < questions.size();i++){
             questions.get(i).setAnswer(answer.get(i));
         }
+        LocalDate localDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String date = localDate.format(formatter);
 
-        CompletedForm completedForm = new CompletedForm(questions,personName);
+        CompletedForm completedForm = new CompletedForm(questions,personName,date); // Создаем заполненную форму
+
         System.out.println(completedForm);
+        repository.saveCompletedForm(completedForm);// Сохраняем заполненную фопру в наш репозиторий
         return "redirect:/anketa/complete";
     }
+    @RequestMapping(value = "/anketa/listOfCompleted/", method = RequestMethod.GET)
+    public String showCompletedForm(Model model){
+        System.out.println("listOfCompleted");
+        model.addAttribute("repository",repository.getList());
+        System.out.println("repository: " + repository.getList());
+        return "listOfCompleted";
+    }
+
+    @RequestMapping(value = "/anketa/singleForm", method = RequestMethod.POST)
+    public String showOneAnketa(@ModelAttribute("name") String name,@ModelAttribute("questions") ArrayList<Question> questions, Model model){
+        System.out.println("showOneAnketa");
+        System.out.println("name: " + name);
+        System.out.println("questions: " + questions);
+        for (int i = 0;i < questions.size();i++){
+            System.out.println(questions.get(i) + " " + questions.get(i).getText() + " " + questions.get(i).getAnswer());
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("questions",questions);
+
+        return "singleForm";
+
+    }
+
+
 
 //        <table>
 //        <tr th:each="q : ${questions}">
