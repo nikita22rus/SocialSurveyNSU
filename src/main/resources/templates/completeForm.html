@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Complete</title>
+</head>
+<body>
+
+<a th:href = "@{/anketa/listOfCompleted/}"><label>Заполненные</label></a>
+<a th:href = "@{/anketa/complete}"><label>Пройти опрос</label></a>
+
+
+<form action="#" th:action="@{/anketa/complete/addCompletedForm}" method="post">
+
+    <input type="text" name="personName"/>
+
+    <table>
+        <tr th:each="q : ${questions}">
+            <td>
+                <span th:text="${q.text}"></span>
+                <br>
+                <textarea name="answer"></textarea>
+            </td>
+        </tr>
+    </table>
+
+    <input type="submit" value="Сохранить">
+</form>
+
+</body>
+</html>
