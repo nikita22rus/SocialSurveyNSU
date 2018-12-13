@@ -2,13 +2,12 @@ package webapp;
 
 
 import enteties.CompletedForm;
+import enteties.CompletedFormRepository;
 import enteties.Form;
 import enteties.Question;
-import enteties.Repository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 @Controller
 public class WebController {
     private Form form = new Form(); // Создаем форму, чтобы можно было пользоваться ее методами
-    private Repository repository = new Repository();
+    private CompletedFormRepository completedFormRepository = new CompletedFormRepository();
 
     @RequestMapping(value = "/anketa", method = RequestMethod.GET) // Функция первого запуска
     public String anketa (Model model){
@@ -40,8 +39,6 @@ public class WebController {
     @RequestMapping(value = "/anketa/delete", method = RequestMethod.POST)
     public String deleteQuestion(@ModelAttribute("number") int number,Model model) { // Получаем номер из web интерфейса
         System.out.println("deleteQuestion");
-        System.out.println("number to delete: " + number);
-
         form.deleteQuestion(number);
 
         model.addAttribute("form",form.getAllQuestions());
@@ -49,7 +46,6 @@ public class WebController {
         Question question = new Question();
         model.addAttribute("question",question); // Перезаписываем пустой вопрос в модель, для дальнейшего заполнения в функции addQuestion()
 
-        System.out.println(form.getAllQuestions());
         return "redirect:/anketa"; // Эта штука уберает проблему с перезагрузкой страницы
         // С английского переводится как "Переадресовывать", думаю это оно и делает - после выполнения всех действий вызывает нашу самую первую функцию
         // /anketa - , которая просто выводит список
@@ -68,39 +64,46 @@ public class WebController {
     public String addCompletedForm(@RequestParam("answer")ArrayList<String> answer,@RequestParam("personName") String personName, Model model) {
         System.out.println("addCompletedForm");
         ArrayList<Question> questions = form.getAllQuestions();
-        for (String q : answer) {
-            System.out.println(q);
-        }
         for (int i=0;i < questions.size();i++){
             questions.get(i).setAnswer(answer.get(i));
+            System.out.println(questions.get(i));
         }
+
         LocalDate localDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = localDate.format(formatter);
 
         CompletedForm completedForm = new CompletedForm(questions,personName,date); // Создаем заполненную форму
 
-        System.out.println(completedForm);
-        repository.saveCompletedForm(completedForm);// Сохраняем заполненную фопру в наш репозиторий
+        System.out.println("--- " + completedForm);
+        completedFormRepository.saveCompletedForm(completedForm);// Сохраняем заполненную фопру в наш репозиторий
+        System.out.println("--- " + completedFormRepository.getList());
         return "redirect:/anketa/complete";
     }
     @RequestMapping(value = "/anketa/listOfCompleted/", method = RequestMethod.GET)
     public String showCompletedForm(Model model){
         System.out.println("listOfCompleted");
-        model.addAttribute("repository",repository.getList());
-        System.out.println("repository: " + repository.getList());
+        model.addAttribute("completedFormRepository", completedFormRepository.getList());
+
         return "listOfCompleted";
     }
 
     @RequestMapping(value = "/anketa/singleForm", method = RequestMethod.POST)
-    public String showOneAnketa(@ModelAttribute("name") String name,@ModelAttribute("questions") ArrayList<Question> questions, Model model){
+    public String showOneAnketa(@ModelAttribute("name") String name,@ModelAttribute("id") String id, Model model){
         System.out.println("showOneAnketa");
         System.out.println("name: " + name);
-        System.out.println("questions: " + questions);
-        for (int i = 0;i < questions.size();i++){
-            System.out.println(questions.get(i) + " " + questions.get(i).getText() + " " + questions.get(i).getAnswer());
-        }
+        System.out.println("id: " + id);
         model.addAttribute("name",name);
+        ArrayList<Question> questions = completedFormRepository.getById(Long.valueOf(id)).form;
+
+        CompletedForm completedForm = completedFormRepository.getById(Long.valueOf(id));
+
+        System.out.println("************************************");
+        for (int i=0;i < questions.size();i++){
+
+            System.out.println(questions.get(i));
+        }
+        System.out.println("************************************");
         model.addAttribute("questions",questions);
 
         return "singleForm";

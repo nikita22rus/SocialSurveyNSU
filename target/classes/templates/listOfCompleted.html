@@ -11,7 +11,7 @@
 
 
 <table border="1" width="600">
-    <tr th:each="r : ${repository}">
+    <tr th:each="r : ${completedFormRepository}">
         <td>
             <span th:text="${r.id}"></span>
         </td>
@@ -31,7 +31,7 @@
         <td>
             <form action="#" th:action="@{/anketa/singleForm}"  method="post">
                 <input type="hidden" name="name" th:value="${r.name}">
-                <input type="hidden" name="questions" th:value="${r.form}">
+                <input type="hidden" name="id" th:value="${r.id}">
                 <input type="submit" value="Просмотр анкеты">
             </form>
         </td>

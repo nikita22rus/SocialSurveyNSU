@@ -5,12 +5,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Repository {
+public class CompletedFormRepository {
     private final ConcurrentMap<Long, CompletedForm> repository = new ConcurrentHashMap<Long, CompletedForm>();
     private static AtomicLong counter = new AtomicLong();
 
     public void saveCompletedForm(CompletedForm completedForm){ // сохраняем заполненые опросы
         Long id = counter.incrementAndGet();
+        System.out.println("id::  " + id);
         completedForm.setId(id);
         repository.put(id, completedForm);
     }

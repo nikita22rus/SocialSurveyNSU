@@ -10,8 +10,26 @@
 <a th:href = "@{/anketa/complete}"><label>Пройти опрос</label></a>
 
 <br>
-
 <span th:text="${name}"></span>
-<span th:text="${questions}"></span>
+
+
+<table border="1" width="600">
+    <tr th:each="q : ${questions}">
+        <td>
+            <span th:text="${q.number}"></span>
+        </td>
+
+        <td>
+            <span th:text="${q.text}"></span>
+        </td>
+
+        <td>
+            <span th:text="${q.answer}"></span>
+        </td>
+    </tr>
+
+
+</table>
+
 </body>
 </html>
