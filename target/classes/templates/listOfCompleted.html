@@ -35,7 +35,12 @@
                 <input type="submit" value="Просмотр анкеты">
             </form>
         </td>
-
+        <td>
+            <form action="#" th:action="@{/anketa/delete}" th:object="${f}" method="post">
+                <input type="hidden" name="number" th:value="${f.number}">
+                <input type="submit" value="Удалить" align="left">
+            </form>
+        </td>
     </tr>
 
 
