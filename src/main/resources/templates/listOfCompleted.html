@@ -5,7 +5,7 @@
     <title>Completed</title>
 </head>
 <body>
-
+<a th:href = "@{/anketa/}"><label>Анкета</label></a>
 <a th:href = "@{/anketa/listOfCompleted/}"><label>Заполненные</label></a>
 <a th:href = "@{/anketa/complete}"><label>Пройти опрос</label></a>
 
@@ -23,9 +23,6 @@
         <td>
             <span th:text="${r.name}"></span>
         </td>
-        <td>
-            <span th:text="${r.form}"></span>
-        </td>
 
 
         <td>
@@ -37,7 +34,6 @@
         </td>
 
     </tr>
-
 
 </table>
 

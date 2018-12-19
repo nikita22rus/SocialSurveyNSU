@@ -71,14 +71,15 @@ public class WebController {
 
         for (int i=0;i < questions.size();i++){
             Question q = questions.get(i);
-            Question qd = new Question(q.getText());
-
+            System.out.println("q: " + q);
+            Question qd = new Question(q.getNumber(),q.getText(),q.getType());
+            System.out.println("qd: " + qd);
 
             qd.setAnswer(answer.get(i));
 
             questionsDuplicates.add(qd);
 
-            System.out.println(qd);
+
         }
 
         LocalDate localDate = LocalDate.now();

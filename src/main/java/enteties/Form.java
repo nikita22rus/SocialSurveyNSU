@@ -24,6 +24,7 @@ public class Form { // Класс нашей формы. Хранятся наш
         System.out.println(form);
 //        question.setId(counter.incrementAndGet());
         numbersRecalculation(); // Пересчетать нумерацию вопросов
+        System.out.println(form);
     }
 
     public void deleteQuestion(int number){

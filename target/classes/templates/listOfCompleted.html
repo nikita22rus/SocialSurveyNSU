@@ -5,7 +5,7 @@
     <title>Completed</title>
 </head>
 <body>
-
+<a th:href = "@{/anketa/}"><label>Анкета</label></a>
 <a th:href = "@{/anketa/listOfCompleted/}"><label>Заполненные</label></a>
 <a th:href = "@{/anketa/complete}"><label>Пройти опрос</label></a>
 
@@ -23,9 +23,6 @@
         <td>
             <span th:text="${r.name}"></span>
         </td>
-        <td>
-            <span th:text="${r.form}"></span>
-        </td>
 
 
         <td>
@@ -35,14 +32,8 @@
                 <input type="submit" value="Просмотр анкеты">
             </form>
         </td>
-        <td>
-            <form action="#" th:action="@{/anketa/delete}" th:object="${f}" method="post">
-                <input type="hidden" name="number" th:value="${f.number}">
-                <input type="submit" value="Удалить" align="left">
-            </form>
-        </td>
-    </tr>
 
+    </tr>
 
 </table>
 

@@ -5,7 +5,7 @@
     <title>Complete</title>
 </head>
 <body>
-
+<a th:href = "@{/anketa/}"><label>Анкета</label></a>
 <a th:href = "@{/anketa/listOfCompleted/}"><label>Заполненные</label></a>
 <a th:href = "@{/anketa/complete}"><label>Пройти опрос</label></a>
 
@@ -19,7 +19,22 @@
             <td>
                 <span th:text="${q.text}"></span>
                 <br>
+
+                <div th:switch="${q.type}">
+
+                <div th:case="'t1'">
                 <textarea name="answer"></textarea>
+                </div>
+
+                <div th:case="'t2'">
+                    <input type="radio" value="Да" name="answer">Да</input>
+                    <input type="radio" value="Нет" name="answer">Нет</input>
+                </div>
+
+                <div th:case="'t3'">
+                    <input type="number" name="answer"/>
+                </div>
+                </div>
             </td>
         </tr>
     </table>

@@ -20,7 +20,7 @@
     <title>Form</title>
 </head>
 <body>
-
+<a th:href = "@{/anketa/}"><label>Анкета</label></a>
 <a th:href = "@{/anketa/listOfCompleted/}"><label>Заполненные</label></a>
 <a th:href = "@{/anketa/complete}"><label>Пройти опрос</label></a>
 
@@ -30,6 +30,12 @@
 <form action="#" th:action="@{/anketa/add}" th:object="${question}" method="post" align="center">
     <input type="text" th:field="*{text}" minlength="3" maxlength="512">
     <input type="submit" value="Добавить">
+
+    <select th:field="*{type}">
+        <option value="t1">Текст</option>
+        <option value="t2">Да/Нет</option>
+        <option value="t3">Число</option>
+    </select>
 </form>
 
 <table border="1" width="30%" align="center">

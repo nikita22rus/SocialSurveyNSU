@@ -5,7 +5,31 @@ public class Question {
     private int number;
     protected String text;
     protected String answer;
+    protected String type;
 
+
+    public boolean correctness; // вопрос правильный или неправильный
+    private Long id; // id пока не нужен
+
+
+    // Два конструктора класса
+    public Question (){}
+
+    public Question (int number,String text,String type) {
+        this.number = number;
+        this.text = text;
+        this.type = type;
+    }
+
+
+    // Геттеры и Сеттеры для всех атрибутов класса
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
     public String getAnswer() {
         return answer;
     }
@@ -14,19 +38,7 @@ public class Question {
         this.answer = answer;
     }
 
-    public boolean correctness; // вопрос правильный или неправильный
 
-    private Long id; // id пока не нужен
-
-    // Два конструктора класса
-    public Question (){}
-
-    public Question (String text) {
-        this.text = text;
-    }
-
-
-    // Геттеры и Сеттеры для всех атрибутов класса
     public boolean isCorrect() {
         return correctness;
     }
@@ -60,6 +72,6 @@ public class Question {
     }
 
     public String toString(){
-        return this.text + " - " + this.answer;
+        return this.number + ". " + this.text + " - " + this.answer + ". Type = " + this.type;
     }
 }
