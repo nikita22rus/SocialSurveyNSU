@@ -52,7 +52,8 @@ public class WebController {
     }
 
 
-    @RequestMapping(value = "/anketa/complete", method = RequestMethod.GET)
+
+        @RequestMapping(value = "/anketa/complete", method = RequestMethod.GET)
     public String completeForm(Model model){
         System.out.println("completeForm");
         String Name = new String();
@@ -64,16 +65,27 @@ public class WebController {
     public String addCompletedForm(@RequestParam("answer")ArrayList<String> answer,@RequestParam("personName") String personName, Model model) {
         System.out.println("addCompletedForm");
         ArrayList<Question> questions = form.getAllQuestions();
+
+        ArrayList<Question> questionsDuplicates = new ArrayList<>();
+
+
         for (int i=0;i < questions.size();i++){
-            questions.get(i).setAnswer(answer.get(i));
-            System.out.println(questions.get(i));
+            Question q = questions.get(i);
+            Question qd = new Question(q.getText());
+
+
+            qd.setAnswer(answer.get(i));
+
+            questionsDuplicates.add(qd);
+
+            System.out.println(qd);
         }
 
         LocalDate localDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = localDate.format(formatter);
 
-        CompletedForm completedForm = new CompletedForm(questions,personName,date); // Создаем заполненную форму
+        CompletedForm completedForm = new CompletedForm(questionsDuplicates,personName,date); // Создаем заполненную форму
 
         System.out.println("--- " + completedForm);
         completedFormRepository.saveCompletedForm(completedForm);// Сохраняем заполненную фопру в наш репозиторий
@@ -108,8 +120,12 @@ public class WebController {
 
         return "singleForm";
 
-    }
+        }
+    //public void deleteAnswer(int number){
+    //    System.out.println("deleteAnswer");
+    //    completedFormRepository.remove(number-1);
 
+    }
 
 
 //        <table>
@@ -144,4 +160,4 @@ public class WebController {
 //        return "anketa";
 //    }
 
-}
+
