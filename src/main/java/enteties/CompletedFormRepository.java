@@ -9,9 +9,8 @@ public class CompletedFormRepository {
     private final ConcurrentMap<Long, CompletedForm> repository = new ConcurrentHashMap<Long, CompletedForm>();
     private static AtomicLong counter = new AtomicLong();
 
-    public void saveCompletedForm(CompletedForm completedForm){ // сохраняем заполненые опросы
+    public void saveCompletedForm(CompletedForm completedForm){
         Long id = counter.incrementAndGet();
-        System.out.println("id::  " + id);
         completedForm.setId(id);
         repository.put(id, completedForm);
     }
@@ -21,5 +20,5 @@ public class CompletedFormRepository {
 
     public CompletedForm getById(Long id){
         return repository.get(id);
-    } // Получить форму по id-ку
+    }
 }

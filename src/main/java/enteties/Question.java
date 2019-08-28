@@ -9,8 +9,6 @@ public class Question {
 
 
     public boolean correctness; // вопрос правильный или неправильный
-    private Long id; // id пока не нужен
-
 
     // Два конструктора класса
     public Question (){}
@@ -61,14 +59,6 @@ public class Question {
 
     public void setNumber(int number) {
         this.number = number;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String toString(){

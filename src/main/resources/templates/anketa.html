@@ -2,30 +2,25 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <style type="text/css">
-        table{border-collapse: collapse;
 
-        margin-top: 10px;
-        }
-        td{
-
-
+    table{border-collapse: collapse;
+    margin-top: 10px;
+    }
+    td{
     padding: 5px; /* Поля вокруг содержимого ячеек */
     border: 0px; /* Граница вокруг ячеек */
    }
 
-
-
     </style>
     <meta charset="UTF-8">
     <title>Form</title>
+
 </head>
+
 <body>
 <a th:href = "@{/anketa/}"><label>Анкета</label></a>
 <a th:href = "@{/anketa/listOfCompleted/}"><label>Заполненные</label></a>
 <a th:href = "@{/anketa/complete}"><label>Пройти опрос</label></a>
-
-
-
 
 <form action="#" th:action="@{/anketa/add}" th:object="${question}" method="post" align="center">
     <input type="text" th:field="*{text}" minlength="3" maxlength="512">
@@ -49,10 +44,7 @@
                 <input type="submit" value="Удалить" align="left">
             </form>
         </td>
-
-
     </tr>
-
 </table>
 
 </body>

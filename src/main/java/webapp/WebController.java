@@ -1,6 +1,5 @@
 package webapp;
 
-
 import enteties.CompletedForm;
 import enteties.CompletedFormRepository;
 import enteties.Form;
@@ -27,43 +26,38 @@ public class WebController {
 
     @RequestMapping(value = "/anketa/add", method = RequestMethod.POST)
     public String addQuestion(@ModelAttribute("question") Question question,Model model){
-        form.questionVerifier(question); // Впроверка вопроса
+        form.questionVerifier(question); // Проверка вопроса
         if (question.isCorrect()) {
-            form.saveQuestion(question); // Если правильно, сохраняй
+            form.saveQuestion(question); // Сохранить, если правильно
         }
 
         model.addAttribute("form", form.getAllQuestions()); // Перезапишем В модели список вопросов
-        return "redirect:/anketa"; // Запускаем наш шаблон anketa
+        return "redirect:/anketa"; // Запускаем шаблон anketa
     }
 
     @RequestMapping(value = "/anketa/delete", method = RequestMethod.POST)
     public String deleteQuestion(@ModelAttribute("number") int number,Model model) { // Получаем номер из web интерфейса
-        System.out.println("deleteQuestion");
         form.deleteQuestion(number);
-
         model.addAttribute("form",form.getAllQuestions());
 
         Question question = new Question();
-        model.addAttribute("question",question); // Перезаписываем пустой вопрос в модель, для дальнейшего заполнения в функции addQuestion()
+        model.addAttribute("question",question); // Перезаписываем пустой вопрос в модель,
+        // для дальнейшего заполнения в функции addQuestion()
 
-        return "redirect:/anketa"; // Эта штука уберает проблему с перезагрузкой страницы
-        // С английского переводится как "Переадресовывать", думаю это оно и делает - после выполнения всех действий вызывает нашу самую первую функцию
-        // /anketa - , которая просто выводит список
+        return "redirect:/anketa";
     }
 
 
 
-        @RequestMapping(value = "/anketa/complete", method = RequestMethod.GET)
+    @RequestMapping(value = "/anketa/complete", method = RequestMethod.GET)
     public String completeForm(Model model){
-        System.out.println("completeForm");
         String Name = new String();
-        model.addAttribute("Name",Name); // Создаем и добавляем новый атрибут
-        model.addAttribute("questions",form.getAllQuestions()); // И вопрсы, чтобы потом их вывести пользователю
+        model.addAttribute("Name",Name);
+        model.addAttribute("questions",form.getAllQuestions());
         return "completeForm";
     }
     @RequestMapping(value = "/anketa/complete/addCompletedForm", method = RequestMethod.POST)
     public String addCompletedForm(@RequestParam("answer")ArrayList<String> answer,@RequestParam("personName") String personName, Model model) {
-        System.out.println("addCompletedForm");
         ArrayList<Question> questions = form.getAllQuestions();
 
         ArrayList<Question> questionsDuplicates = new ArrayList<>();
@@ -71,15 +65,10 @@ public class WebController {
 
         for (int i=0;i < questions.size();i++){
             Question q = questions.get(i);
-            System.out.println("q: " + q);
             Question qd = new Question(q.getNumber(),q.getText(),q.getType());
-            System.out.println("qd: " + qd);
-
             qd.setAnswer(answer.get(i));
 
             questionsDuplicates.add(qd);
-
-
         }
 
         LocalDate localDate = LocalDate.now();
@@ -88,77 +77,27 @@ public class WebController {
 
         CompletedForm completedForm = new CompletedForm(questionsDuplicates,personName,date); // Создаем заполненную форму
 
-        System.out.println("--- " + completedForm);
         completedFormRepository.saveCompletedForm(completedForm);// Сохраняем заполненную фопру в наш репозиторий
-        System.out.println("--- " + completedFormRepository.getList());
         return "redirect:/anketa/complete";
     }
     @RequestMapping(value = "/anketa/listOfCompleted/", method = RequestMethod.GET)
     public String showCompletedForm(Model model){
-        System.out.println("listOfCompleted");
         model.addAttribute("completedFormRepository", completedFormRepository.getList());
-
         return "listOfCompleted";
     }
 
     @RequestMapping(value = "/anketa/singleForm", method = RequestMethod.POST)
     public String showOneAnketa(@ModelAttribute("name") String name,@ModelAttribute("id") String id, Model model){
-        System.out.println("showOneAnketa");
-        System.out.println("name: " + name);
-        System.out.println("id: " + id);
+
         model.addAttribute("name",name);
         ArrayList<Question> questions = completedFormRepository.getById(Long.valueOf(id)).form;
-
         CompletedForm completedForm = completedFormRepository.getById(Long.valueOf(id));
 
-        System.out.println("************************************");
-        for (int i=0;i < questions.size();i++){
-
-            System.out.println(questions.get(i));
-        }
-        System.out.println("************************************");
         model.addAttribute("questions",questions);
-
         return "singleForm";
-
         }
-    //public void deleteAnswer(int number){
-    //    System.out.println("deleteAnswer");
-    //    completedFormRepository.remove(number-1);
-
     }
 
 
-//        <table>
-//        <tr th:each="q : ${questions}">
-//            <td>
-//                <span th:text="${q.text}"></span>
-//                <br>
-//                <textarea
-//    th:field="*{q.answer}"></textarea>
-//            </td>
-//        </tr>
-//    </table>
-
-
-
-
-
-
-
-
-
-//    @RequestMapping(value = "/anketa/delete/{number}", method = RequestMethod.GET)
-//    @ResponseBody
-//    public String deleteQuestion(@PathVariable int number, Model model){
-//        System.out.println("Controller ----------------- deleteQuestion");
-//        System.out.println("number: " + number);
-//        form.deleteQuestion(number);
-//        Question question = new Question();
-//        model.addAttribute("question",question);
-//        System.out.println(form.getAllQuestions());
-//        model.addAttribute("form",form.getAllQuestions());
-//        return "anketa";
-//    }
 
 
